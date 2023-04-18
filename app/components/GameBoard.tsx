@@ -29,30 +29,39 @@ export default function GameBoard({}: Props) {
     function checkWinner() {
       if (grid[0][0] === grid[0][1] && grid[0][1] === grid[0][2] && grid[0][0] !== 0) {
         setWinner(grid[0][0])
+        return
       }
       if (grid[1][0] === grid[1][1] && grid[1][1] === grid[1][2] && grid[1][0] !== 0) {
         setWinner(grid[1][0])
+        return
       }
       if (grid[2][0] === grid[2][1] && grid[2][1] === grid[2][2] && grid[2][0] !== 0) {
         setWinner(grid[2][0])
+        return
       }
       if (grid[0][0] === grid[1][0] && grid[1][0] === grid[2][0] && grid[0][0] !== 0) {
         setWinner(grid[0][0])
+        return
       }
       if (grid[0][1] === grid[1][1] && grid[1][1] === grid[2][1] && grid[0][1] !== 0) {
         setWinner(grid[0][1])
+        return
       }
       if (grid[0][2] === grid[1][2] && grid[1][2] === grid[2][2] && grid[0][2] !== 0) {
         setWinner(grid[0][2])
+        return
       }
       if (grid[0][0] === grid[1][1] && grid[1][1] === grid[2][2] && grid[0][0] !== 0) {
         setWinner(grid[0][0])
+        return
       }
       if (grid[0][2] === grid[1][1] && grid[1][1] === grid[2][0] && grid[0][2] !== 0) {
         setWinner(grid[0][2])
+        return
       }
       if (grid.every(row => row.every(col => col !== 0))) { 
         setWinner('Draw')
+        return
       }
     }
 
