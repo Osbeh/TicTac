@@ -1,5 +1,6 @@
 'use client'
-import React from 'react'
+import computerTurn from '@/lib/computerTurn'
+import React, { useEffect } from 'react'
 
 type Props = {}
 
@@ -15,54 +16,75 @@ export default function GameBoard({}: Props) {
     ])
 
     const [turn, setTurn] = React.useState<'X' | 'O'>('X')
-
     const [winner, setWinner] = React.useState<'X' | 'O' | 'Draw' | null>(null)
+
+    useEffect(() => {
+      if (winner) {
+        return
+      } 
+      const checkWinner = () => {
+        if (grid[0][0] === grid[0][1] && grid[0][1] === grid[0][2] && grid[0][0] !== 0) {
+          setWinner(grid[0][0])
+          return
+        }
+        if (grid[1][0] === grid[1][1] && grid[1][1] === grid[1][2] && grid[1][0] !== 0) {
+          setWinner(grid[1][0])
+          return
+        }
+        if (grid[2][0] === grid[2][1] && grid[2][1] === grid[2][2] && grid[2][0] !== 0) {
+          setWinner(grid[2][0])
+          return
+        }
+        if (grid[0][0] === grid[1][0] && grid[1][0] === grid[2][0] && grid[0][0] !== 0) {
+          setWinner(grid[0][0])
+          return
+        }
+        if (grid[0][1] === grid[1][1] && grid[1][1] === grid[2][1] && grid[0][1] !== 0) {
+          setWinner(grid[0][1])
+          return
+        }
+        if (grid[0][2] === grid[1][2] && grid[1][2] === grid[2][2] && grid[0][2] !== 0) {
+          setWinner(grid[0][2])
+          return
+        }
+        if (grid[0][0] === grid[1][1] && grid[1][1] === grid[2][2] && grid[0][0] !== 0) {
+          setWinner(grid[0][0])
+          return
+        }
+        if (grid[0][2] === grid[1][1] && grid[1][1] === grid[2][0] && grid[0][2] !== 0) {
+          setWinner(grid[0][2])
+          return
+        }
+        if (grid.every(row => row.every(col => col !== 0))) { 
+          setWinner('Draw')
+          return
+        }
+      }
+      
+      if (turn === 'X') {
+        checkWinner()
+        document.title = 'Tic Tac Toe | X'
+      }
+      else if (turn === 'O' && !winner)  {
+        checkWinner()
+        document.title = 'Tic Tac Toe | O'
+        const newGrid = [...grid]
+        const computerMove = computerTurn(newGrid)
+        console.log(computerMove)
+        if (computerMove) {
+          newGrid[computerMove[0]][computerMove[1]] = turn
+          setGrid(newGrid)
+          setTurn('X')
+        }
+      }
+      
+      }, [turn, grid, winner])
 
     function gameClick(rowIndex:number, colIndex:number) {
       const newGrid = [...grid]
       newGrid[rowIndex][colIndex] = turn
       setTurn(turn === 'X' ? 'O' : 'X')
       setGrid(newGrid)
-      checkWinner()
-    }
-
-    function checkWinner() {
-      if (grid[0][0] === grid[0][1] && grid[0][1] === grid[0][2] && grid[0][0] !== 0) {
-        setWinner(grid[0][0])
-        return
-      }
-      if (grid[1][0] === grid[1][1] && grid[1][1] === grid[1][2] && grid[1][0] !== 0) {
-        setWinner(grid[1][0])
-        return
-      }
-      if (grid[2][0] === grid[2][1] && grid[2][1] === grid[2][2] && grid[2][0] !== 0) {
-        setWinner(grid[2][0])
-        return
-      }
-      if (grid[0][0] === grid[1][0] && grid[1][0] === grid[2][0] && grid[0][0] !== 0) {
-        setWinner(grid[0][0])
-        return
-      }
-      if (grid[0][1] === grid[1][1] && grid[1][1] === grid[2][1] && grid[0][1] !== 0) {
-        setWinner(grid[0][1])
-        return
-      }
-      if (grid[0][2] === grid[1][2] && grid[1][2] === grid[2][2] && grid[0][2] !== 0) {
-        setWinner(grid[0][2])
-        return
-      }
-      if (grid[0][0] === grid[1][1] && grid[1][1] === grid[2][2] && grid[0][0] !== 0) {
-        setWinner(grid[0][0])
-        return
-      }
-      if (grid[0][2] === grid[1][1] && grid[1][1] === grid[2][0] && grid[0][2] !== 0) {
-        setWinner(grid[0][2])
-        return
-      }
-      if (grid.every(row => row.every(col => col !== 0))) { 
-        setWinner('Draw')
-        return
-      }
     }
 
     if (winner) {
