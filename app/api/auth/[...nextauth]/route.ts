@@ -1,15 +1,28 @@
-import NextAuth from "next-auth"
+import NextAuth, { User as NextUser } from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import Credentials from "next-auth/providers/credentials"
 import dbConnect from "@/lib/mongooseConnect"
 import User from "@/models/user"
+import { JWT } from "next-auth/jwt"
+
+// interface IUser {
+//   _id: string
+//   email?: string
+//   name: string
+//   password: string,
+//   role?: string,
+//   wins: number,
+//   losses: number,
+//   draws: number,
+//   createdAt?:Date
+// }
 
 const handler = NextAuth({
     providers: [
-        GithubProvider({
-          clientId: process.env.GITHUB_ID || "",
-          clientSecret: process.env.GITHUB_SECRET || "",
-        }),
+        // GithubProvider({
+        //   clientId: process.env.GITHUB_ID || "",
+        //   clientSecret: process.env.GITHUB_SECRET || "",
+        // }),
         Credentials({
           name: "credentials",
           // The credentials object is what's used to generate Next Auths default login page - We will not use it however.
@@ -37,6 +50,35 @@ const handler = NextAuth({
           
       })
       ],
+       callbacks: {
+    //     // We can pass in additional information from the user document MongoDB returns
+    //     // This could be avatars, role, display name, etc...
+        async jwt({token, user}){
+            if (user) {
+                token.user = {
+                    _id: user._id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role,
+                    wins: user.wins,
+                    losses: user.losses,
+                    draws: user.draws
+                }
+            }
+            return token
+        },
+        // If we want to access our extra user info from sessions we have to pass it the token here to get them in sync:
+        session: async({session, token}) => {
+            if(token){
+                session.user = token.user as NextUser
+             }
+            return session
+         }
+     },
+     pages: {
+        // Here you can define your own custom pages for login, recover password, etc.
+          signIn: '/signin', // we are going to use a custom login page (we'll create this in just a second)
+      },  
       
 })
 
