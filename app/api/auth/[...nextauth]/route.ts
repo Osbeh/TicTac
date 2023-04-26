@@ -3,19 +3,6 @@ import GithubProvider from "next-auth/providers/github"
 import Credentials from "next-auth/providers/credentials"
 import dbConnect from "@/lib/mongooseConnect"
 import User from "@/models/user"
-import { JWT } from "next-auth/jwt"
-
-// interface IUser {
-//   _id: string
-//   email?: string
-//   name: string
-//   password: string,
-//   role?: string,
-//   wins: number,
-//   losses: number,
-//   draws: number,
-//   createdAt?:Date
-// }
 
 const handler = NextAuth({
     providers: [
@@ -40,9 +27,12 @@ const handler = NextAuth({
               if(!user) { throw new Error('No user with a matching username was found.')}
 
               // Use the comparePassword method we defined in our user.js Model file to authenticate
-              // const pwValid = await user.comparePassword(credentials.password)
+              const pwValid = await user.comparePassword(credentials?.password)
 
-              // if(!pwValid){ throw new Error("Your password is invalid") }
+            if(!pwValid){ 
+                // throw new Error("Your password is invalid") 
+                return null;
+            }
               console.log(user)
               return user
            }
@@ -76,8 +66,7 @@ const handler = NextAuth({
          }
      },
      pages: {
-        // Here you can define your own custom pages for login, recover password, etc.
-          signIn: '/signin', // we are going to use a custom login page (we'll create this in just a second)
+          signIn: '/signin', // we are going to use a custom login page
       },  
       
 })
