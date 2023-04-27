@@ -116,9 +116,9 @@ export default function GameBoard({}: Props) {
 
 
   return (
-    <>
-      <h2>You play as {playerCharacter}</h2>
-      <h2>Computer plays as {computerCharacter}</h2>
+    <div className='p-4'>
+      <div className=' inline text-pink-300'>You play as: <p className={playerCharacter === 'X' ? 'text-blue-500 font-bold inline-block' : 'text-fuchsia-500 font-bold inline-block'}>{playerCharacter}</p></div>
+      <div className=' text-pink-300'>AI plays as: <p className={playerCharacter === 'X' ? 'text-blue-500 font-bold inline-block' : 'text-fuchsia-500 font-bold inline-block'}>{computerCharacter}</p></div>
       <div className='grid grid-cols-3 grid-rows-3 gap-0 w-max m-auto pt-10'>
           {grid.map((row, rowIndex) => (
             <div key={rowIndex}>
@@ -137,6 +137,6 @@ export default function GameBoard({}: Props) {
           )}
           
       </div>
-    </>
+    </div>
   )
 }
