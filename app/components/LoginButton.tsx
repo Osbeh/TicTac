@@ -1,16 +1,16 @@
 "use client"
 
 import { useSession, signIn, signOut } from "next-auth/react"
+import Link from "next/link";
 
 type Props = {}
 
 const LoginButton = (props: Props) => {
 const { data: session } = useSession();
 if (session) {
-  console.log(session.user)
     return (
         <div className="dropdown cursor-pointer shadow-black shadow-md bg-slate-700 self-center pl-4 pr-4 inline-block relative w-24 rounded-md hover:rounded-b-none transition-all ease-linear duration-300">
-            {session.user?.name}
+            <Link className="hover:font-bold hover:underline" href={`/players/${session.user?._id}`}>{session.user?.name}</Link>
             <div className="dropdown-content bg-slate-700 hidden absolute z-10 right-0 w-24 rounded-b hover:font-bold hover:underline">
                 <button className=" block w-20 m-auto" onClick={() => signOut()}>Log out</button>
             </div>
