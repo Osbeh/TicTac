@@ -1,3 +1,4 @@
+import Player from "@/app/components/Player";
 import { getServerSession } from "next-auth";
 import { AuthOptions } from "next-auth";
 
@@ -28,8 +29,6 @@ export default async function PlayerPage({ params } : ParamProps) {
 
         const session = await getServerSession()
 
-        console.log(session);
-
     return (
         <div className="p4 mt-4 flex flex-col items-center">
             <h1 className="text-2xl font-bold text-pink-500">{player.name}</h1>
@@ -47,11 +46,7 @@ export default async function PlayerPage({ params } : ParamProps) {
             </div>
 
             {session && session.user?.email === player.email && 
-            <div className="mt-4">
-                <div className="text-pink-500 p-4">Information visible only to you:</div>
-                <div className="text-pink-300">Email: {player.email}</div>
-                <div className="text-pink-300">Player ID: {player._id}</div>
-            </div>
+                <Player player={player}/>
             }
         </div>
     )

@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
     dbConnect()
     try {
         const user = await User.create(data)
-        console.log(user)
         // return new Response('created user')
         if (user) return NextResponse.json({message:'user created'}, {status: 201})
     } catch(err:any) {

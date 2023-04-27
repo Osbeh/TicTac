@@ -33,7 +33,6 @@ const handler = NextAuth({
                 // throw new Error("Your password is invalid") 
                 return null;
             }
-              console.log(user)
               return user
            }
 

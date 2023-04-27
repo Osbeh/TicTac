@@ -106,6 +106,7 @@ export default function GameBoard({}: Props) {
     }
 
     if (winner) {
+      
       return (
         <div className='w-max m-auto pt-10'>
           <h1 className='text-3xl font-bold text-center p-6'>{winner === 'Draw' ? 'Draw' : winner === playerCharacter ? 'You Win' : 'You Lose'}!</h1>
