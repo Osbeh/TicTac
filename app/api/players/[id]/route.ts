@@ -21,3 +21,17 @@ export async function DELETE (req:Request, { params }: {params: ParamProps}) {
         return new Response(JSON.stringify(error))
     }
 }
+
+
+export async function PUT (req:Request, { params }: {params: ParamProps}) {
+    const data = await req.json()
+    console.log(data)
+    dbConnect()
+    try {
+        const res = await User.findByIdAndUpdate(params.id, data, {new: true})
+        return NextResponse.json(res)
+    } catch (error) {
+        return new Response(JSON.stringify(error))
+    }
+}
+    

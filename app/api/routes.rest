@@ -7,3 +7,12 @@ content-type: application/json
     "password":"",
     "email":"kallekallela@kallellaan.com"
 }
+
+######
+
+PUT http://localhost:3000/api/players/6447bbb34ae76364de762f15 HTTP/1.1
+content-type: application/json
+
+{
+    "wins":1
+}

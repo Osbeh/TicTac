@@ -1,5 +1,6 @@
 'use client'
 import computerTurn from '@/lib/computerTurn'
+import { useSession } from 'next-auth/react'
 import React, { useEffect } from 'react'
 
 type Props = {}
@@ -20,10 +21,76 @@ export default function GameBoard({}: Props) {
     const [playerCharacter, setPlayerCharacter] = React.useState<'X' | 'O' | null>(null)
     const [computerCharacter, setComputerCharacter] = React.useState<'X' | 'O' | null>(null)
 
+    const { data: session, update } = useSession();
+
     useEffect(() => {
-      if (winner) {
+      if (!session && winner) {
         return
-      } 
+      }
+
+      async function updatePlayer(matchResult:string, amount:number) {
+        try { await fetch(`/api/players/${session?.user._id}`, {
+          method: "PUT",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: `{"${matchResult}": ${amount}}`
+        })
+        } catch(err) {
+          console.error(err)
+        }
+        // return res
+      }
+
+      async function getPlayer(id:string) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/players/${id}`, {
+                cache: 'no-store'
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.log(error)
+            
+            return
+        }
+      }
+      
+      if (session && winner) {
+        //Update database
+        if (winner === 'Draw') { 
+          //get draws and update
+          const player = getPlayer(session?.user._id)
+          player.then(data => {
+            //Update player
+            updatePlayer('draws', data.draws + 1)
+            // update.then()
+          })
+        }
+
+        if (winner === playerCharacter) {
+          //get wins and update
+          //Get player
+          const player = getPlayer(session?.user._id)
+          player.then(data => {
+            //Update player
+            updatePlayer('wins', data.wins + 1)
+            // update.then()
+          })
+        }
+
+        if (winner === computerCharacter) {
+          //get loses and update
+          const player = getPlayer(session?.user._id)
+          player.then(data => {
+            //Update player
+            updatePlayer('losses', data.losses + 1)
+            // update.then()
+          })
+        }
+        
+      }
+      
       const checkWinner = () => {
         if (grid[0][0] === grid[0][1] && grid[0][1] === grid[0][2] && grid[0][0] !== 0) {
           setWinner(grid[0][0])
@@ -96,7 +163,7 @@ export default function GameBoard({}: Props) {
         }
       }
       
-    }, [turn, grid, winner, playerCharacter, computerCharacter])
+    }, [turn, grid, winner, playerCharacter, computerCharacter, session])
 
     function gameClick(rowIndex:number, colIndex:number) {
       const newGrid = [...grid]
@@ -105,11 +172,13 @@ export default function GameBoard({}: Props) {
       setGrid(newGrid)
     }
 
+    
+
     if (winner) {
-      
       return (
         <div className='w-max m-auto pt-10'>
           <h1 className='text-3xl font-bold text-center p-6'>{winner === 'Draw' ? 'Draw' : winner === playerCharacter ? 'You Win' : 'You Lose'}!</h1>
+
           <button className='w-max m-auto p-2 bg-purple-500 text-white font-bold rounded-md' onClick={() => window.location.reload()}>Play Again</button>
         </div>
       )
