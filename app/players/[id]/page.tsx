@@ -1,6 +1,7 @@
 import Player from "@/app/components/Player";
 import { getServerSession } from "next-auth";
 import { AuthOptions } from "next-auth";
+import Link from "next/link";
 
 interface ParamProps {
     params: {
@@ -46,6 +47,10 @@ export default async function PlayerPage({ params } : ParamProps) {
                 <div>Draws: </div>
                 <div>{player.draws}</div>
             </div>
+
+            <Link href={`/players/${player._id}/gamehistory`}>
+                <button className="mt-4 bg-slate-700 text-pink-500 border border-black shadow-black shadow-md rounded-md w-60 h-8 hover:border-none hover:font-bold hover:shadow-none hover:underline transition-all ease-linear duration-200">View Game History</button>
+            </Link>
 
             {session && session.user?.email === player.email && 
                 <Player player={player}/>

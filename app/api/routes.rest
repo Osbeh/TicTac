@@ -16,3 +16,20 @@ content-type: application/json
 {
     "wins":1
 }
+
+####
+
+GET http://localhost:3000/api/players/6447bbb34ae76364de762f15/games
+
+
+#####
+POST http://localhost:3000/api/games HTTP/1.1
+content-type: application/json
+
+{
+    "playerId":"6447bbb34ae76364de762f15",
+    "playerChar":"X",
+    "playerMoves": [[1,1], [1,2], [1,0]],
+    "computerMoves": [[2,0], [0,1]],
+    "winner": "X"
+}
