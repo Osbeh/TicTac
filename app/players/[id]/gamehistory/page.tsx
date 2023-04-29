@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react'
 
 interface ParamProps {
@@ -21,9 +22,25 @@ async function getGames(id:string) {
 
 export default async function GameHistoryPage({ params } : ParamProps) {
     const games = await getGames(params.id)
-    console.log(games)
+    if (!games) {
+        return <div className='mt-4 text-pink-300'>No games found</div>
+    }
   return (
-    <div>GameHistory page</div>
-    //loop through games...
+    <div className='mt-4'>
+        <h1 className='font-bold text-xl text-pink-500'>Game History</h1>
+        <div>
+            <ul>
+                {games.map((game:GameProps) => {
+                    return (
+                    <Link href={`/games/${game._id}`} key={game._id}>
+                        <li>{game.playedAt} {game.winner === game.playerChar ? 'Won' : game.winner === 'Draw' ? 'Draw' : 'Lost'}</li>
+                    </Link>
+                    )
+                }
+                )}
+                
+            </ul>
+            </div>
+    </div>
   )
 }

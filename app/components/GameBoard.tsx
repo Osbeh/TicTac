@@ -155,7 +155,6 @@ export default function GameBoard({}: Props) {
         document.title = 'Tic Tac Toe | O'
         const newGrid = [...grid]
         const computerMove = computerTurn(newGrid)
-        console.log(computerMove)
         if (computerMove) {
           setComputerMove(prev => [...prev, computerMove])
           newGrid[computerMove[0]][computerMove[1]] = computerCharacter
@@ -176,18 +175,8 @@ export default function GameBoard({}: Props) {
     }
 
     if (winner) {
-      // console.log(playerMoves)
-      // console.log(computerMoves)
-      // if (session) {
-      //   // createGame(session.user._id)
-      // }
       return (
-        // <div className='w-max m-auto pt-10'>
-        //   <h1 className='text-3xl font-bold text-center p-6'>{winner === 'Draw' ? 'Draw' : winner === playerCharacter ? 'You Win' : 'You Lose'}!</h1>
-
-        //   <button className='w-max m-auto p-2 bg-purple-500 text-white font-bold rounded-md' onClick={() => window.location.reload()}>Play Again</button>
-        // </div>
-        <GameOver playerId={session?.user._id} winner={winner} playerCharacter={playerCharacter} playerMoves={playerMoves} computerMoves={computerMoves}/>
+        <GameOver playerId={session?.user._id} winner={winner} playerChar={playerCharacter} playerMoves={playerMoves} computerMoves={computerMoves}/>
       )
     } 
 

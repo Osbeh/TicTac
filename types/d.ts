@@ -7,3 +7,14 @@ interface PlayerProps {
     losses:number,
     draws:number
 }
+
+
+interface GameProps {
+    _id:string,
+    playerId:string,
+    playerChar:string,
+    playerMoves:number[][],
+    computerMoves:number[][],
+    winner:string,
+    playedAt:string,
+}
