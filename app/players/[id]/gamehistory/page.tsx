@@ -37,7 +37,7 @@ export default async function GameHistoryPage({ params } : ParamProps) {
                         <div className='mt-4 flex justify-center' key={game._id}>
                             {/* <GameRow game={game}/> */}
                         <Link href={`/games/${game._id}`} >
-                            <li className='text-pink-300 border-b-2 border-pink-300 p-2 hover:underline'>
+                            <li className='text-white border-b-2 border-pink-300 p-2 hover:underline'>
                                 {gameDate.toString()} 
                                 {game.winner === game.playerChar ? <p className='text-green-500'>Win</p> : game.winner === 'Draw' ? <p className='text-gray-500'>Draw</p> : <p className='text-red-500'>Defeat</p>}
                             </li> 
