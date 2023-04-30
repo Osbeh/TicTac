@@ -16,5 +16,5 @@ interface GameProps {
     playerMoves:number[][],
     computerMoves:number[][],
     winner:string,
-    playedAt:string,
+    playedAt:Date,
 }

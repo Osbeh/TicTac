@@ -32,13 +32,15 @@ export default async function GamePage({params}: Props) {
     game.playerMoves.map((move, index) => grid[move[0]][move[1]] = `${game.playerChar}${index + 1}`)
     game.computerMoves.map((move, index) => grid[move[0]][move[1]] = `${game.playerChar === 'X' ? 'O' : 'X'}${index + 1}`)
     
+      const playedDate = new Date(game.playedAt)
+
   return (
     <div className='mt-4'>
         <h1 className='text-pink-500 text-xl font-bold'>Game details for {params.id}</h1>
         <div>
             <p>Player {player.name} played as {game.playerChar}</p>
             <p>Result: {game.winner === 'Draw' ? 'Draw' : game.winner === game.playerChar ? 'Win' : 'Defeat'}</p>
-            <p>Game played on {game.playedAt}</p>
+            <p>Game played on {playedDate.toString()}</p>
             <div className='mt-4'>
                 <p>Game History:</p>
                 <div className='grid grid-cols-3 grid-rows-3 gap-0 w-max m-auto pt-10'>

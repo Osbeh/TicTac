@@ -25,16 +25,24 @@ export default async function GameHistoryPage({ params } : ParamProps) {
     if (!games) {
         return <div className='mt-4 text-pink-300'>No games found</div>
     }
+    games.reverse()
   return (
     <div className='mt-4'>
         <h1 className='font-bold text-xl text-pink-500'>Game History</h1>
-        <div>
+        <div className=' h-screen overflow-auto'>
             <ul>
                 {games.map((game:GameProps) => {
+                    const gameDate = new Date(game.playedAt)
                     return (
-                    <Link href={`/games/${game._id}`} key={game._id}>
-                        <li>{game.playedAt} {game.winner === game.playerChar ? 'Won' : game.winner === 'Draw' ? 'Draw' : 'Lost'}</li>
-                    </Link>
+                        <div className='mt-4 flex justify-center' key={game._id}>
+                            {/* <GameRow game={game}/> */}
+                        <Link href={`/games/${game._id}`} >
+                            <li className='text-pink-300 border-b-2 border-pink-300 p-2 hover:underline'>
+                                {gameDate.toString()} 
+                                {game.winner === game.playerChar ? <p className='text-green-500'>Win</p> : game.winner === 'Draw' ? <p className='text-gray-500'>Draw</p> : <p className='text-red-500'>Defeat</p>}
+                            </li> 
+                        </Link>
+                    </div>
                     )
                 }
                 )}
