@@ -7,6 +7,7 @@ type Props = {}
 
 const LoginButton = (props: Props) => {
 const { data: session } = useSession();
+
 if (session) {
     return (
         <div className="dropdown cursor-pointer shadow-black shadow-md bg-slate-700 self-center pl-4 pr-4 inline-block relative w-24 rounded-md hover:rounded-b-none transition-all ease-linear duration-300">
@@ -16,6 +17,11 @@ if (session) {
             </div>
         </div>
     )
+}
+if (session === undefined) {
+  return (
+    <div className="bg-slate-700 shadow-black shadow-md rounded-md w-16">...</div>
+  )
 }
   return (
     <button className="bg-slate-700 shadow-black shadow-md rounded-md w-16 hover:font-bold hover:shadow-none hover:underline transition-all ease-linear duration-200" onClick={() => signIn()}>Log in</button>

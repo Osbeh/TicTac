@@ -10,7 +10,6 @@ type Props = {
 
 async function createGame({playerId, playerChar, playerMoves, computerMoves, winner}:Props) {
     if (!playerId)  {
-        window.location.reload()
         return
     }
     console.log('creating game')
@@ -27,14 +26,17 @@ async function createGame({playerId, playerChar, playerMoves, computerMoves, win
     if (!response.ok) {
       throw new Error(data.message || 'Something went wrong');
     }
-    window.location.reload()
   }
 
 export default function GameOver({playerId, winner, playerChar, playerMoves, computerMoves}: Props) {
-  return (
+    createGame({playerId, playerChar, playerMoves, computerMoves, winner})
+    return (
     <div className='w-max m-auto pt-10'>
           <h1 className='text-3xl font-bold text-center p-6'>{winner === 'Draw' ? 'Draw' : winner === playerChar ? 'You Win' : 'You Lose'}!</h1>
-          <button className='w-max m-auto p-2 bg-purple-500 text-white font-bold rounded-md' onClick={() => createGame({playerId, playerChar, playerMoves, computerMoves, winner})}>Play Again</button>
+          <button className='w-max m-auto p-2 bg-purple-500 text-white font-bold rounded-md'
+            // onClick={() => createGame({playerId, playerChar, playerMoves, computerMoves, winner})}
+            onClick={() => window.location.reload()}
+          >Play Again</button>
     </div>
   )
 }
