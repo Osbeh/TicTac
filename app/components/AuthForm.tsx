@@ -1,5 +1,5 @@
 'use client'
-import { signIn } from 'next-auth/react';
+import { SignInResponse, signIn } from 'next-auth/react';
 import React, { FormEvent, useRef } from 'react'
 
 type Props = {}
@@ -29,6 +29,8 @@ export default function AuthForm({}: Props) {
 
     const [registered, setRegistered] = React.useState(false);
     const [loginMode, setLoginMode] = React.useState(false);
+    const [loginError, setLoginError] = React.useState(false);
+    const [regError, setRegError] = React.useState('');
 
     function toggleRegistered() {
       setLoginMode(true)
@@ -46,22 +48,42 @@ export default function AuthForm({}: Props) {
       // optional: Add validation here
 
      if (loginMode) {
-      // try {
-         await signIn('credentials', {
+      //  try {
+        const signinResult = await signIn('credentials', {
           callbackUrl: '/',
           name: enteredUsername,
           password: enteredPassword,
+          redirect:false
           });
-        // } catch(err) {
-        //   console.error(err)
+
+          if (signinResult?.ok) {
+            // window.location.href = signinResult.url || '/'
+
+          }
+
+        if (!signinResult) {
+          setLoginError(true)
+          return
+        }
+
+        if (signinResult.error) {
+          console.log(signinResult.error)
+          setLoginError(true)
+        } else {
+          window.location.href = signinResult.url || '/'
+        }
+        
+        //  } catch(err) {
+          //  console.error(err)
         // }
      } else {
-         try {
+        try {
          const result = await createUser(enteredUsername, enteredPassword, enteredEmail);
-          setRegistered(true)
-         } catch (error) {
+         setRegistered(true)
+        } catch (error:any) {
          console.log(error);
-         }
+         setRegError(error.message)
+        }
       }
     }
   return (
@@ -92,6 +114,7 @@ export default function AuthForm({}: Props) {
               <button className='bg-slate-700 text-pink-500 border border-black shadow-black shadow-md rounded-md w-60 h-8 hover:border-none hover:font-bold hover:shadow-none hover:underline transition-all ease-linear duration-200'>
                 {loginMode ? 'Login' : 'Create Account'}</button>
             </div>
+            {loginError && <div className='text-red-500'>Login failed, please check username and password</div>}
             {!loginMode && <div>
               <p>Already have an account?</p>
               <button className='bg-slate-700 text-pink-500 border border-black shadow-black shadow-md rounded-md w-60 h-8 hover:border-none hover:font-bold hover:shadow-none hover:underline transition-all ease-linear duration-200'
@@ -99,6 +122,7 @@ export default function AuthForm({}: Props) {
               >Login here</button>
             </div>
             }
+            {regError && <div className='text-red-500'>{regError}</div>}
           </form>
           ): (
             <div>
