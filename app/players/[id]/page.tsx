@@ -23,12 +23,27 @@ async function getPlayer(id:string) {
     }
 }
 
+export async function generateMetadata({ params } : ParamProps) {
+    const player:PlayerProps = await getPlayer(params.id);
+    if (!player) {
+        return {
+            title: 'Tic Tac Toe',
+        };
+    }
+    return {
+        title: `${player.name} | Tic Tac Toe`,
+    };
+}
+
+
 export default async function PlayerPage({ params } : ParamProps) {
 
         const player:PlayerProps = await getPlayer(params.id);
         if (!player) {
             return <div>Player not found</div>
         }
+
+        
 
         const session = await getServerSession()
 
